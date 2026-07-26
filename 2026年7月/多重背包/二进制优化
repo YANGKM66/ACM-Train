@@ -1,1 +1,68 @@
+#include <bits/stdc++.h>
+using namespace std;
 
+#define int long long	
+#define endl '\n'
+
+using ull = unsigned long long;
+
+const int mod = 1e9 + 7;
+const ull base = 131;
+const int inf = 1e18;
+const int N = 1e5 + 8;
+
+int v[N],w[N],m[N],a[N],b[N];
+int dp[N];
+
+void solve()
+{
+	int n,k;
+	cin >> n >> k;
+	int cnt = 0;
+	for(int i = 1; i <= n; i++)
+	{
+		cin >> a[i] >> b[i] >> m[i];
+	}
+	
+	
+	for(int i = 1; i <= n; i++)
+	{
+		int sum = 0;
+		for(int j = 0;; j++)
+		{
+			if(sum + (1LL << j) > m[i]) break;
+			else
+			{
+				cnt++;
+				v[cnt] = a[i] * (1LL << j);
+				w[cnt] = b[i] * (1LL << j);
+				m[i] -= (1LL << j);
+			}
+		}
+		
+		if(m[i])
+		{
+			cnt++;
+			v[cnt] = a[i] * m[i];
+			w[cnt] = b[i] * m[i];
+		}
+	}
+	
+	for(int i = 1; i <= cnt; i++)
+	{
+		for(int j = k; j >= w[i]; j--)
+		{
+			dp[j] = max(dp[j],dp[j - w[i]] + v[i]);
+		}
+	}
+	cout << dp[k] << endl;
+}
+signed main() 
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0), cout.tie(0);
+	int tt = 1;
+//	cin >> tt;
+	while(tt--) solve();
+	return 0;
+}
